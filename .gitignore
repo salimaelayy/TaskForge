@@ -1,0 +1,19 @@
+# ---- Backend (Node) ----
+backend/node_modules/
+backend/.env
+backend/.env.*
+backend/npm-debug.log*
+backend/yarn-debug.log*
+backend/yarn-error.log*
+backend/pnpm-debug.log*
+
+# ---- Android / IntelliJ ----
+android/.gradle/
+android/.idea/
+android/local.properties
+android/**/build/
+android/captures/
+
+# ---- OS / misc ----
+.DS_Store
+Thumbs.db
