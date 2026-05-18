@@ -1,25 +1,38 @@
 const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-require("dotenv").config();
+const path = require("path");
 
-const connectDB = require("./src/config/db");
+require("dotenv").config({ path: path.resolve(process.cwd(), ".env") });
+require("dotenv").config({ path: path.resolve(__dirname, ".env") });
 
-const authRoutes = require("./src/routes/auth.routes");
-const taskRoutes = require("./src/routes/task.routes");
+const connectDB = require("./config/db.js");
+
+const authRoutes = require("./routes/authRoute.js");
+const taskRoutes = require("./routes/taskRoute.js");
+const userRoutes = require("./routes/userRoute.js");
+
+const notFound = require("./middleware/notFound");
+const errorHandler = require("./middleware/errorHandler");
 
 const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
+
+const corsOrigin = process.env.CORS_ORIGIN || "http://localhost:5173";
+app.use(cors({ credentials: true, origin: corsOrigin }));
 
 app.get("/health", (req, res) => {
   res.status(200).json({ status: "ok" });
 });
 
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/tasks", taskRoutes);
+
+app.use(notFound);
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 
